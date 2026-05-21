@@ -33,12 +33,6 @@ Check that TeX can find the installed package:
 kpsewhich macromint.sty
 ```
 
-To inspect the target files without copying them, run:
-
-```sh
-l3build install --dry-run
-```
-
 Then load the package directly:
 
 ```tex
@@ -70,7 +64,7 @@ In a paper that owns an OpenType math setup:
 \usepackage{macromint}
 ```
 
-For arXiv or conference submission source, vendor the exact `macromint.sty` file
+For arXiv, vendor the exact `macromint.sty` file
 into the paper source tree.
 
 ## Scope
@@ -85,14 +79,6 @@ Run from the repository root:
 ```sh
 l3build check
 ```
-
-The tests compile small documents with `macromint` alone and with `figmint`
-under LuaLaTeX, XeLaTeX, and pdfLaTeX. They also compile a real `unicode-math`
-smoke file under LuaLaTeX and XeLaTeX to exercise the active OpenType math
-backend, plus a tagged LuaLaTeX math smoke file using MathML structure elements.
-The public API test covers alphabet macros, delimiters, calculus commands,
-references, text abbreviations, and theorem environments. Successful build logs
-are scanned for TeX errors and warnings.
 
 ## License
 
