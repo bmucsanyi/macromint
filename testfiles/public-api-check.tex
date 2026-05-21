@@ -1,0 +1,257 @@
+\documentclass{article}
+\usepackage{macromint}
+
+\begin{document}
+
+\section{References}
+\label{sec:refs}
+
+\begin{figure}[tbp]
+  \centering
+  \fbox{figure}
+  \caption{Figure reference target}
+  \label{fig:target}
+\end{figure}
+
+\begin{table}[tbp]
+  \centering
+  \begin{tabular}{cc}
+    left & right
+  \end{tabular}
+  \caption{Table reference target}
+  \label{tab:target}
+\end{table}
+
+\begin{equation}
+  \label{eq:target}
+  a \defeq b
+\end{equation}
+
+See \figref{fig:target}, \tabref{tab:target}, \eqnref{eq:target}, and
+\secref{sec:refs}. We use \eg examples, \ie clarifications, \cf comparisons,
+\etc. Text can mention \vs, \wrt, \dof, \etal, \iid, and \eos.
+
+\section{Alphabets}
+
+\[
+  \begin{aligned}
+    & \ba \bA \bb \bB \bc \bC \bd \bD \be \bE \bff \bF \bg \bG \bh \bH \bi \bI \\
+    & \bj \bJ \bk \bK \bl \bL \bmm \bM \bn \bN \bo \bO \bp \bP \bq \bQ \\
+    & \br \bR \bs \bS \bt \bT \bu \bU \bv \bV \bw \bW \bx \bX \by \bY \bz \bZ \\
+    & \bzero \bone
+  \end{aligned}
+\]
+
+\[
+  \begin{aligned}
+    & \balpha \bAlpha \bbeta \bBeta \bgamma \bGamma \bdelta \bDelta
+      \bepsilon \bEpsilon \bzeta \bZeta \beeta \bEta \\
+    & \btheta \bTheta \biota \bIota \bkappa \bKappa \blambda \bLambda
+      \bmu \bMu \bnu \bNu \bxi \bXi \\
+    & \bomicron \bOmicron \bpi \bPi \brho \bRho \bsigma \bSigma
+      \btau \bTau \bupsilon \bUpsilon \\
+    & \bphi \bPhi \bchi \bChi \bpsi \bPsi \bomega \bOmega
+  \end{aligned}
+\]
+
+\[
+  \begin{aligned}
+    & \nA \nB \nC \nD \nE \nF \nG \nH \nI \nJ \nK \nL \nM \\
+    & \nN \nO \nP \nQ \nR \nS \nT \nU \nV \nW \nX \nY \nZ
+  \end{aligned}
+  \qquad
+  \begin{aligned}
+    & \cA \cB \cC \cD \cE \cF \cG \cH \cI \cJ \cK \cL \cM \\
+    & \cN \cO \cP \cQ \cR \cS \cT \cU \cV \cW \cX \cY \cZ
+  \end{aligned}
+\]
+
+\section{Notation}
+
+\[
+  \begin{aligned}
+    & \set{x \in \nR^d \where \norm{x} \le 1}
+      \qquad
+      \set{y \in \cM \suchthat f(y) \rdefeq x} \\
+    & \abs{\sum_{i=1}^n x_i}
+      \qquad
+      \card{\set{i \where x_i > 0}}
+      \qquad
+      \ceil{\frac{n}{2}}
+      \qquad
+      \floor{\frac{n}{2}}
+      \qquad
+      \inprod{\bx}{\by}
+  \end{aligned}
+\]
+
+\[
+  \begin{aligned}
+    & \argmax_x f(x)
+      \qquad
+      \argmin_x f(x)
+      \qquad
+      \softmax(\bx)
+      \qquad
+      \sgn(x) \\
+    & \Bias(T)
+      \qquad
+      \Var(X)
+      \qquad
+      \Cov(X, Y)
+      \qquad
+      \diag(\bx) \\
+    & \Perplexity(p)
+      \qquad
+      \rank(A)
+      \qquad
+      X \indep Y
+  \end{aligned}
+\]
+
+\[
+  \begin{aligned}
+    & \domain{f}
+      \qquad
+      \range{f}
+      \qquad
+      \kernel{A}
+      \qquad
+      \linspan{\bx_1, \bx_2}
+      \qquad
+      \trace{A} \\
+    & \boundaryof{\cM}
+      \qquad
+      \closureof{S}
+      \qquad
+      \interiorof{S}
+      \qquad
+      \ball{\epsilon}{x}
+      \qquad
+      \clball{\epsilon}{x}
+  \end{aligned}
+\]
+
+\[
+  \id[\cX]
+  \qquad
+  \pvec{x \\ y}
+  \qquad
+  A\inv
+  \qquad
+  A\adj
+  \qquad
+  A\pinv
+  \qquad
+  \orthcomp{V}
+\]
+
+\section{Calculus}
+
+\[
+  \begin{aligned}
+    & \diff{x}
+      \qquad
+      \diff[2]{x}
+      \qquad
+      \pdiff{x}
+      \qquad
+      \pdiff[2]{x} \\
+    & \deriv{x}{f(x)}
+      \qquad
+      \deriv*[2]{x}{f(x)}
+      \qquad
+      \derivat{x}{f(x)}{0}
+      \qquad
+      \derivat*[2]{x}{f(x)}{0} \\
+    & \dderiv{x}{f}
+      \qquad
+      \dderivat{x}{f}{x_0}
+      \qquad
+      \dderivat{x}{f}[y]{y_0}
+  \end{aligned}
+\]
+
+\[
+  \begin{aligned}
+    & \pderiv{x}{f(x)}
+      \qquad
+      \pderiv*[2]{x}{f(x)}
+      \qquad
+      \pderivat{x}{f(x)}{0}
+      \qquad
+      \pderivat*{x}{f(x)}[y]{0} \\
+    & \mpderiv{\partial x \partial y}{f(x, y)}
+      \qquad
+      \mpderiv*[2]{\partial x^2}{f(x)}
+      \qquad
+      \mpderivat{\partial x}{f(x)}{x}{0}
+  \end{aligned}
+\]
+
+\[
+  \begin{aligned}
+    & \mipderiv{\alpha}{f}
+      \qquad
+      \mipderiv*{\alpha}{f}[x]
+      \qquad
+      \mipderiv{\alpha}[x]{f}
+      \qquad
+      \mipderiv{\alpha}[x]{f}[0] \\
+    & \jacobian{f}
+      \qquad
+      \jacobian[\bx]{f}[\bx_0]
+      \qquad
+      \gradient{f}
+      \qquad
+      \gradient[\bx]{f}[\bx_0] \\
+    & \divergence{\bv}
+      \qquad
+      \divergence{\bv}[x]
+      \qquad
+      \hessian{f}
+      \qquad
+      \hessian[\bx]{f}[\bx_0] \\
+    & \laplaceop{f}
+      \qquad
+      \laplaceop[\bx]{f}[\bx_0]
+      \qquad
+      \rintegral[0][1]{x}{f(x)}
+  \end{aligned}
+\]
+
+\section{Theorems}
+
+\begin{definition}
+  A set is invariant when it maps into itself.
+\end{definition}
+
+\begin{theorem}
+  Every fixed point is a point.
+\end{theorem}
+
+\begin{proposition}
+  A linear map preserves linear combinations.
+\end{proposition}
+
+\begin{lemma}
+  If $x = y$, then $y = x$.
+\end{lemma}
+
+\begin{corollary}
+  Equality is symmetric.
+\end{corollary}
+
+\begin{assumption}
+  The domain is nonempty.
+\end{assumption}
+
+\begin{problem}
+  Find a minimizer of $f$ over $\cX$.
+\end{problem}
+
+\begin{remark}
+  The notation compiles in text and math contexts.
+\end{remark}
+
+\end{document}

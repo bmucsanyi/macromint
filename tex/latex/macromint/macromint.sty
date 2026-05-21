@@ -1,0 +1,453 @@
+\NeedsTeXFormat{LaTeX2e}[2020-10-01]
+\ProvidesExplPackage{macromint}{2026-05-21}{0.1.0}
+  {Personal macro bundle}
+
+\RequirePackage{mathtools}
+\RequirePackage{amsthm}
+\RequirePackage{xspace}
+
+\ExplSyntaxOn
+\cs_if_exist:NF \symbb
+  { \RequirePackage{amssymb} }
+
+\cs_new_protected:Npn \macromint_bold:n #1
+  {
+    \cs_if_exist:NTF \symbf
+      { \symbf {#1} }
+      { \boldsymbol {#1} }
+  }
+
+\cs_new_protected:Npn \macromint_bb:n #1
+  {
+    \cs_if_exist:NTF \symbb
+      { \symbb {#1} }
+      { \mathbb {#1} }
+  }
+
+\cs_new_protected:Npn \macromint_cal:n #1
+  {
+    \cs_if_exist:NTF \symcal
+      { \symcal {#1} }
+      { \mathcal {#1} }
+  }
+
+\cs_new_protected:Npn \macromint_up:n #1
+  {
+    \cs_if_exist:NTF \symup
+      { \symup {#1} }
+      { \mathrm {#1} }
+  }
+
+\NewDocumentCommand{\macromintbold}{m}{\macromint_bold:n {#1}}
+\NewDocumentCommand{\macromintbb}{m}{\macromint_bb:n {#1}}
+\NewDocumentCommand{\macromintcal}{m}{\macromint_cal:n {#1}}
+\NewDocumentCommand{\macromintup}{m}{\macromint_up:n {#1}}
+\ExplSyntaxOff
+
+% Relation symbols
+\NewDocumentCommand{\defeq}{}{\coloneq}
+\NewDocumentCommand{\rdefeq}{}{\eqcolon}
+
+% Delimiters
+\NewDocumentCommand{\where}{}
+  { \PackageError{macromint}{\string\where\space may\space only\space be\space used\space inside\space \string\set}{Use \string\where\space only in the argument of \string\set.} }
+\NewDocumentCommand{\suchthat}{}
+  { \PackageError{macromint}{\string\suchthat\space may\space only\space be\space used\space inside\space \string\set}{Use \string\suchthat\space only in the argument of \string\set.} }
+\ExplSyntaxOn
+\DeclarePairedDelimiterX{\macromint_set_delim:n}[1]{\{}{\}}{#1}
+\DeclarePairedDelimiter{\macromint_abs_delim:n}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\macromint_norm_delim:n}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\macromint_ceil_delim:n}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\macromint_floor_delim:n}{\lfloor}{\rfloor}
+\DeclarePairedDelimiterX{\macromint_inprod_delim:nn}[2]{\langle}{\rangle}{#1, #2}
+
+\NewDocumentCommand{\set}{m}
+  {
+    \begingroup
+      \RenewDocumentCommand{\where}{}{\colon}
+      \RenewDocumentCommand{\suchthat}{}{\nonscript\:\delimsize\vert\allowbreak\nonscript\:\mathopen{}}
+      \macromint_set_delim:n*{#1}
+    \endgroup
+  }
+\NewDocumentCommand{\abs}{m}{\macromint_abs_delim:n*{#1}}
+\NewDocumentCommand{\norm}{m}{\macromint_norm_delim:n*{#1}}
+\NewDocumentCommand{\card}{m}{\macromint_abs_delim:n*{#1}}
+\NewDocumentCommand{\ceil}{m}{\macromint_ceil_delim:n*{#1}}
+\NewDocumentCommand{\floor}{m}{\macromint_floor_delim:n*{#1}}
+\NewDocumentCommand{\inprod}{m m}{\macromint_inprod_delim:nn*{#1}{#2}}
+\ExplSyntaxOff
+
+% Bold Latin letters
+\NewDocumentCommand{\ba}{}{\macromintbold{a}}
+\NewDocumentCommand{\bA}{}{\macromintbold{A}}
+\NewDocumentCommand{\bb}{}{\macromintbold{b}}
+\NewDocumentCommand{\bB}{}{\macromintbold{B}}
+\NewDocumentCommand{\bc}{}{\macromintbold{c}}
+\NewDocumentCommand{\bC}{}{\macromintbold{C}}
+\NewDocumentCommand{\bd}{}{\macromintbold{d}}
+\NewDocumentCommand{\bD}{}{\macromintbold{D}}
+\NewDocumentCommand{\be}{}{\macromintbold{e}}
+\NewDocumentCommand{\bE}{}{\macromintbold{E}}
+\NewDocumentCommand{\bff}{}{\macromintbold{f}}
+\NewDocumentCommand{\bF}{}{\macromintbold{F}}
+\NewDocumentCommand{\bg}{}{\macromintbold{g}}
+\NewDocumentCommand{\bG}{}{\macromintbold{G}}
+\NewDocumentCommand{\bh}{}{\macromintbold{h}}
+\NewDocumentCommand{\bH}{}{\macromintbold{H}}
+\NewDocumentCommand{\bi}{}{\macromintbold{i}}
+\NewDocumentCommand{\bI}{}{\macromintbold{I}}
+\NewDocumentCommand{\bj}{}{\macromintbold{j}}
+\NewDocumentCommand{\bJ}{}{\macromintbold{J}}
+\NewDocumentCommand{\bk}{}{\macromintbold{k}}
+\NewDocumentCommand{\bK}{}{\macromintbold{K}}
+\NewDocumentCommand{\bl}{}{\macromintbold{l}}
+\NewDocumentCommand{\bL}{}{\macromintbold{L}}
+\NewDocumentCommand{\bmm}{}{\macromintbold{m}}
+\NewDocumentCommand{\bM}{}{\macromintbold{M}}
+\NewDocumentCommand{\bn}{}{\macromintbold{n}}
+\NewDocumentCommand{\bN}{}{\macromintbold{N}}
+\NewDocumentCommand{\bo}{}{\macromintbold{o}}
+\NewDocumentCommand{\bO}{}{\macromintbold{O}}
+\NewDocumentCommand{\bp}{}{\macromintbold{p}}
+\NewDocumentCommand{\bP}{}{\macromintbold{P}}
+\NewDocumentCommand{\bq}{}{\macromintbold{q}}
+\NewDocumentCommand{\bQ}{}{\macromintbold{Q}}
+\NewDocumentCommand{\br}{}{\macromintbold{r}}
+\NewDocumentCommand{\bR}{}{\macromintbold{R}}
+\NewDocumentCommand{\bs}{}{\macromintbold{s}}
+\NewDocumentCommand{\bS}{}{\macromintbold{S}}
+\NewDocumentCommand{\bt}{}{\macromintbold{t}}
+\NewDocumentCommand{\bT}{}{\macromintbold{T}}
+\NewDocumentCommand{\bu}{}{\macromintbold{u}}
+\NewDocumentCommand{\bU}{}{\macromintbold{U}}
+\NewDocumentCommand{\bv}{}{\macromintbold{v}}
+\NewDocumentCommand{\bV}{}{\macromintbold{V}}
+\NewDocumentCommand{\bw}{}{\macromintbold{w}}
+\NewDocumentCommand{\bW}{}{\macromintbold{W}}
+\NewDocumentCommand{\bx}{}{\macromintbold{x}}
+\NewDocumentCommand{\bX}{}{\macromintbold{X}}
+\NewDocumentCommand{\by}{}{\macromintbold{y}}
+\NewDocumentCommand{\bY}{}{\macromintbold{Y}}
+\NewDocumentCommand{\bz}{}{\macromintbold{z}}
+\NewDocumentCommand{\bZ}{}{\macromintbold{Z}}
+
+% Bold digits
+\NewDocumentCommand{\bzero}{}{\macromintbold{0}}
+\NewDocumentCommand{\bone}{}{\macromintbold{1}}
+
+% Bold Greek letters
+\NewDocumentCommand{\balpha}{}{\macromintbold{\alpha}}
+\NewDocumentCommand{\bAlpha}{}{\macromintbold{A}}
+\NewDocumentCommand{\bbeta}{}{\macromintbold{\beta}}
+\NewDocumentCommand{\bBeta}{}{\macromintbold{B}}
+\NewDocumentCommand{\bgamma}{}{\macromintbold{\gamma}}
+\NewDocumentCommand{\bGamma}{}{\macromintbold{\Gamma}}
+\NewDocumentCommand{\bdelta}{}{\macromintbold{\delta}}
+\NewDocumentCommand{\bDelta}{}{\macromintbold{\Delta}}
+\NewDocumentCommand{\bepsilon}{}{\macromintbold{\epsilon}}
+\NewDocumentCommand{\bEpsilon}{}{\macromintbold{E}}
+\NewDocumentCommand{\bzeta}{}{\macromintbold{\zeta}}
+\NewDocumentCommand{\bZeta}{}{\macromintbold{Z}}
+\NewDocumentCommand{\beeta}{}{\macromintbold{\eta}}
+\NewDocumentCommand{\bEta}{}{\macromintbold{H}}
+\NewDocumentCommand{\btheta}{}{\macromintbold{\theta}}
+\NewDocumentCommand{\bTheta}{}{\macromintbold{\Theta}}
+\NewDocumentCommand{\biota}{}{\macromintbold{\iota}}
+\NewDocumentCommand{\bIota}{}{\macromintbold{I}}
+\NewDocumentCommand{\bkappa}{}{\macromintbold{\kappa}}
+\NewDocumentCommand{\bKappa}{}{\macromintbold{K}}
+\NewDocumentCommand{\blambda}{}{\macromintbold{\lambda}}
+\NewDocumentCommand{\bLambda}{}{\macromintbold{\Lambda}}
+\NewDocumentCommand{\bmu}{}{\macromintbold{\mu}}
+\NewDocumentCommand{\bMu}{}{\macromintbold{M}}
+\NewDocumentCommand{\bnu}{}{\macromintbold{\nu}}
+\NewDocumentCommand{\bNu}{}{\macromintbold{N}}
+\NewDocumentCommand{\bxi}{}{\macromintbold{\xi}}
+\NewDocumentCommand{\bXi}{}{\macromintbold{\Xi}}
+\NewDocumentCommand{\bomicron}{}{\macromintbold{o}}
+\NewDocumentCommand{\bOmicron}{}{\macromintbold{O}}
+\NewDocumentCommand{\bpi}{}{\macromintbold{\pi}}
+\NewDocumentCommand{\bPi}{}{\macromintbold{\Pi}}
+\NewDocumentCommand{\brho}{}{\macromintbold{\rho}}
+\NewDocumentCommand{\bRho}{}{\macromintbold{P}}
+\NewDocumentCommand{\bsigma}{}{\macromintbold{\sigma}}
+\NewDocumentCommand{\bSigma}{}{\macromintbold{\Sigma}}
+\NewDocumentCommand{\btau}{}{\macromintbold{\tau}}
+\NewDocumentCommand{\bTau}{}{\macromintbold{T}}
+\NewDocumentCommand{\bupsilon}{}{\macromintbold{\upsilon}}
+\NewDocumentCommand{\bUpsilon}{}{\macromintbold{\Upsilon}}
+\NewDocumentCommand{\bphi}{}{\macromintbold{\phi}}
+\NewDocumentCommand{\bPhi}{}{\macromintbold{\Phi}}
+\NewDocumentCommand{\bchi}{}{\macromintbold{\chi}}
+\NewDocumentCommand{\bChi}{}{\macromintbold{X}}
+\NewDocumentCommand{\bpsi}{}{\macromintbold{\psi}}
+\NewDocumentCommand{\bPsi}{}{\macromintbold{\Psi}}
+\NewDocumentCommand{\bomega}{}{\macromintbold{\omega}}
+\NewDocumentCommand{\bOmega}{}{\macromintbold{\Omega}}
+
+% Blackboard bold letters
+\NewDocumentCommand{\nA}{}{\macromintbb{A}}
+\NewDocumentCommand{\nB}{}{\macromintbb{B}}
+\NewDocumentCommand{\nC}{}{\macromintbb{C}}
+\NewDocumentCommand{\nD}{}{\macromintbb{D}}
+\NewDocumentCommand{\nE}{}{\macromintbb{E}}
+\NewDocumentCommand{\nF}{}{\macromintbb{F}}
+\NewDocumentCommand{\nG}{}{\macromintbb{G}}
+\NewDocumentCommand{\nH}{}{\macromintbb{H}}
+\NewDocumentCommand{\nI}{}{\macromintbb{I}}
+\NewDocumentCommand{\nJ}{}{\macromintbb{J}}
+\NewDocumentCommand{\nK}{}{\macromintbb{K}}
+\NewDocumentCommand{\nL}{}{\macromintbb{L}}
+\NewDocumentCommand{\nM}{}{\macromintbb{M}}
+\NewDocumentCommand{\nN}{}{\macromintbb{N}}
+\NewDocumentCommand{\nO}{}{\macromintbb{O}}
+\NewDocumentCommand{\nP}{}{\macromintbb{P}}
+\NewDocumentCommand{\nQ}{}{\macromintbb{Q}}
+\NewDocumentCommand{\nR}{}{\macromintbb{R}}
+\NewDocumentCommand{\nS}{}{\macromintbb{S}}
+\NewDocumentCommand{\nT}{}{\macromintbb{T}}
+\NewDocumentCommand{\nU}{}{\macromintbb{U}}
+\NewDocumentCommand{\nV}{}{\macromintbb{V}}
+\NewDocumentCommand{\nW}{}{\macromintbb{W}}
+\NewDocumentCommand{\nX}{}{\macromintbb{X}}
+\NewDocumentCommand{\nY}{}{\macromintbb{Y}}
+\NewDocumentCommand{\nZ}{}{\macromintbb{Z}}
+
+% Calligraphic letters
+\NewDocumentCommand{\cA}{}{\macromintcal{A}}
+\NewDocumentCommand{\cB}{}{\macromintcal{B}}
+\NewDocumentCommand{\cC}{}{\macromintcal{C}}
+\NewDocumentCommand{\cD}{}{\macromintcal{D}}
+\NewDocumentCommand{\cE}{}{\macromintcal{E}}
+\NewDocumentCommand{\cF}{}{\macromintcal{F}}
+\NewDocumentCommand{\cG}{}{\macromintcal{G}}
+\NewDocumentCommand{\cH}{}{\macromintcal{H}}
+\NewDocumentCommand{\cI}{}{\macromintcal{I}}
+\NewDocumentCommand{\cJ}{}{\macromintcal{J}}
+\NewDocumentCommand{\cK}{}{\macromintcal{K}}
+\NewDocumentCommand{\cL}{}{\macromintcal{L}}
+\NewDocumentCommand{\cM}{}{\macromintcal{M}}
+\NewDocumentCommand{\cN}{}{\macromintcal{N}}
+\NewDocumentCommand{\cO}{}{\macromintcal{O}}
+\NewDocumentCommand{\cP}{}{\macromintcal{P}}
+\NewDocumentCommand{\cQ}{}{\macromintcal{Q}}
+\NewDocumentCommand{\cR}{}{\macromintcal{R}}
+\NewDocumentCommand{\cS}{}{\macromintcal{S}}
+\NewDocumentCommand{\cT}{}{\macromintcal{T}}
+\NewDocumentCommand{\cU}{}{\macromintcal{U}}
+\NewDocumentCommand{\cV}{}{\macromintcal{V}}
+\NewDocumentCommand{\cW}{}{\macromintcal{W}}
+\NewDocumentCommand{\cX}{}{\macromintcal{X}}
+\NewDocumentCommand{\cY}{}{\macromintcal{Y}}
+\NewDocumentCommand{\cZ}{}{\macromintcal{Z}}
+
+% References
+\NewDocumentCommand{\figref}{m}{Fig.~\ref{#1}}
+\NewDocumentCommand{\secref}{m}{Section~\ref{#1}}
+\NewDocumentCommand{\eqnref}{m}{Eq.~\eqref{#1}}
+\NewDocumentCommand{\tabref}{m}{Table~\ref{#1}}
+
+% Standard math operators
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\softmax}{softmax}
+\DeclareMathOperator*{\sgn}{sgn}
+\DeclareMathOperator*{\Bias}{Bias}
+\DeclareMathOperator*{\Var}{Var}
+\DeclareMathOperator*{\Cov}{Cov}
+\DeclareMathOperator*{\diag}{diag}
+\DeclareMathOperator*{\Perplexity}{Perplexity}
+\DeclareMathOperator{\rank}{rank}
+
+% Generic math functions
+\NewDocumentCommand{\domain}{m}{\operatorname{dom}\left( #1 \right)}
+\NewDocumentCommand{\range}{m}{\operatorname{ran}\left( #1 \right)}
+\NewDocumentCommand{\kernel}{m}{\operatorname{ker}\left( #1 \right)}
+\NewDocumentCommand{\linspan}{m}{\operatorname{span}\left( #1 \right)}
+\NewDocumentCommand{\trace}{m}{\operatorname{tr}\left( #1 \right)}
+\NewDocumentCommand{\boundaryof}{m}{\partial #1}
+\NewDocumentCommand{\closureof}{m}{\operatorname{cl}\left( #1 \right)}
+\NewDocumentCommand{\interiorof}{m}{\operatorname{int}\left( #1 \right)}
+\NewDocumentCommand{\ball}{m m}{B_{#1}\left( #2 \right)}
+\NewDocumentCommand{\clball}{m m}{\overline{B}_{#1}\left( #2 \right)}
+\NewDocumentCommand{\id}{o}{\operatorname{id}\IfValueT{#1}{_{#1}}}
+\NewDocumentCommand{\pvec}{m}{\begin{pmatrix} #1 \end{pmatrix}}
+\NewDocumentCommand{\inv}{}{^{-1}}
+\NewDocumentCommand{\adj}{}{^*}
+\NewDocumentCommand{\pinv}{}{^\dagger}
+\NewDocumentCommand{\orthcomp}{m}{#1^\perp}
+
+% Calculus
+\ExplSyntaxOn
+\cs_new:Npn \macromint_order_power:n #1
+  { \str_if_eq:nnF {#1} {1} { ^ {#1} } }
+
+\NewDocumentCommand{\diff}{O{1} m}
+  { \macromintup { d } #2 \macromint_order_power:n {#1} }
+
+\NewDocumentCommand{\pdiff}{O{1} m}
+  { \partial #2 \macromint_order_power:n {#1} }
+
+\NewDocumentCommand{\deriv}{s O{1} m m}
+  {
+    \frac
+      { \macromintup { d } \macromint_order_power:n {#2} \IfBooleanT {#1} {#4} }
+      { \diff [#2] {#3} }
+    \IfBooleanF {#1} {#4}
+  }
+
+\NewDocumentCommand{\derivat}{s O{1} m m m}
+  {
+    \left.
+      \IfBooleanTF {#1}
+        { \deriv * [#2] {#3} {#4} }
+        { \deriv [#2] {#3} {#4} }
+    \right|_{#3 = #5}
+  }
+
+\NewDocumentCommand{\dderiv}{m m}
+  { \partial _ {#1} #2 }
+
+\NewDocumentCommand{\dderivat}{m m o m}
+  {
+    \IfNoValueTF {#3}
+      { \dderiv {#1} {#2} \left( #4 \right) }
+      { \left. \dderiv {#1} {#2} \right|_{#3 = #4} }
+  }
+
+\NewDocumentCommand{\pderiv}{s O{1} m m}
+  {
+    \frac
+      { \partial \macromint_order_power:n {#2} \IfBooleanT {#1} {#4} }
+      { \pdiff [#2] {#3} }
+    \IfBooleanF {#1} {#4}
+  }
+
+\NewDocumentCommand{\pderivat}{s O{1} m m o m}
+  {
+    \left.
+      \IfBooleanTF {#1}
+        { \pderiv * [#2] {#3} {#4} }
+        { \pderiv [#2] {#3} {#4} }
+    \right|_{\IfNoValueTF {#5} {#3} {#5} = #6}
+  }
+
+\NewDocumentCommand{\mpderiv}{s O{1} m m}
+  {
+    \frac
+      { \partial \macromint_order_power:n {#2} \IfBooleanT {#1} {#4} }
+      {#3}
+    \IfBooleanF {#1} {#4}
+  }
+
+\NewDocumentCommand{\mpderivat}{s O{1} m m m m}
+  {
+    \left.
+      \IfBooleanTF {#1}
+        { \mpderiv * [#2] {#3} {#4} }
+        { \mpderiv [#2] {#3} {#4} }
+    \right|_{#5 = #6}
+  }
+
+\NewDocumentCommand{\mipderiv}{s m o m o}
+  {
+    \IfNoValueTF {#3}
+      {
+        \macromintup { D } ^ {#2}
+        \IfBooleanTF {#1} { \left[ #4 \right] } {#4}
+        \IfNoValueF {#5} { \left( #5 \right) }
+      }
+      {
+        \IfNoValueF {#5} { \left. }
+        \frac
+          { \partial ^ { \lvert #2 \rvert } \IfBooleanT {#1} {#4} }
+          { \pdiff [#2] {#3} }
+        \IfBooleanF {#1} {#4}
+        \IfNoValueF {#5} { \right|_{#3 = #5} }
+      }
+  }
+
+\NewDocumentCommand{\jacobian}{o m o}
+  {
+    \IfNoValueTF {#1}
+      { \macromintbold {D} #2 \IfNoValueF {#3} { \left( #3 \right) } }
+      {
+        \IfNoValueTF {#3}
+          { \macromintbold {D} _ {#1} #2 }
+          { \left. \macromintbold {D} _ {#1} #2 \right|_{#1 = #3} }
+      }
+  }
+
+\NewDocumentCommand{\gradient}{o m o}
+  {
+    \IfNoValueTF {#1}
+      { \nabla #2 \IfNoValueF {#3} { \left( #3 \right) } }
+      {
+        \IfNoValueTF {#3}
+          { \nabla _ {#1} #2 }
+          { \left. \nabla _ {#1} #2 \right|_{#1 = #3} }
+      }
+  }
+
+\NewDocumentCommand{\divergence}{m o}
+  { \operatorname { div } \left( #1 \right) \IfNoValueF {#2} { \left( #2 \right) } }
+
+\NewDocumentCommand{\hessian}{o m o}
+  {
+    \IfNoValueTF {#1}
+      { \macromintbold {H} #2 \IfNoValueF {#3} { \left( #3 \right) } }
+      {
+        \IfNoValueTF {#3}
+          { \macromintbold {H} _ {#1} #2 }
+          { \left. \macromintbold {H} _ {#1} #2 \right|_{#1 = #3} }
+      }
+  }
+
+\NewDocumentCommand{\laplaceop}{o m o}
+  {
+    \IfNoValueTF {#1}
+      { \Delta #2 \IfNoValueF {#3} { \left( #3 \right) } }
+      { \left. \Delta #2 \right|_{#1 \IfNoValueF {#3} { = #3 }} }
+  }
+
+\NewDocumentCommand{\rintegral}{o o m m}
+  { \int \IfNoValueF {#1} { _ {#1} } \IfNoValueF {#2} { ^ {#2} } #4 \, \diff {#3} }
+\ExplSyntaxOff
+
+% Statistical independence symbol
+\NewDocumentCommand{\indep}{}{\mathrel{\mathrlap{\perp}\mspace{2mu}\perp}}
+
+% Text abbreviations
+\ExplSyntaxOn
+\cs_new_protected:Npn \macromint_onedot:
+  { \peek_charcode_remove:NTF . { . \xspace } { . \null \xspace } }
+\NewDocumentCommand{\onedot}{}{\macromint_onedot:}
+\NewDocumentCommand{\eg}{}{e.g \onedot}
+\NewDocumentCommand{\Eg}{}{E.g \onedot}
+\NewDocumentCommand{\ie}{}{i.e \onedot}
+\NewDocumentCommand{\Ie}{}{I.e \onedot}
+\NewDocumentCommand{\cf}{}{cf \onedot}
+\NewDocumentCommand{\Cf}{}{Cf \onedot}
+\NewDocumentCommand{\etc}{}{etc \onedot}
+\NewDocumentCommand{\vs}{}{vs \onedot}
+\NewDocumentCommand{\wrt}{}{w.r.t \onedot}
+\NewDocumentCommand{\dof}{}{d.o.f \onedot}
+\NewDocumentCommand{\etal}{}{et~al \onedot}
+\NewDocumentCommand{\iid}{}{i.i.d \onedot}
+\NewDocumentCommand{\eos}{}{\texttt { \char60 EOS \char62 }}
+\ExplSyntaxOff
+
+% Theorem environments
+\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{problem}[theorem]{Problem}
+
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}

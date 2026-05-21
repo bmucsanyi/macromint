@@ -1,0 +1,19 @@
+\documentclass{article}
+\usepackage{macromint}
+\usepackage{figmint}
+
+\begin{document}
+
+\begin{tikzpicture}
+  \begin{axis}[
+    figmint,
+    width = 0.75\linewidth,
+    height = 0.45\linewidth,
+    xlabel = {$\rank(A)$},
+    ylabel = {$\cL$}
+  ]
+    \addplot coordinates {(0, 2) (1, 1) (2, 0.5)};
+  \end{axis}
+\end{tikzpicture}
+
+\end{document}
