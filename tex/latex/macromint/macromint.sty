@@ -8,34 +8,46 @@
 
 \ExplSyntaxOn
 \cs_if_exist:NF \symbb
-  { \RequirePackage{amssymb} }
+  {
+    \cs_if_exist:NF \mathbb
+      { \RequirePackage{amssymb} }
+  }
 
+% The outer braces matter: unicode-math's \sym* commands have a
+% multi-token expansion that consumes their argument from the input
+% stream, so a bare \symbf{x} used as subscript material (e.g.
+% f_\btheta) would steal tokens from after the subscript. Wrapping
+% each helper in its own brace group keeps the expansion self-contained.
 \cs_new_protected:Npn \macromint_bold:n #1
   {
     \cs_if_exist:NTF \symbf
-      { \symbf {#1} }
-      { \boldsymbol {#1} }
+      { { \symbf {#1} } }
+      {
+        \cs_if_exist:NTF \bm
+          { { \bm {#1} } }
+          { { \boldsymbol {#1} } }
+      }
   }
 
 \cs_new_protected:Npn \macromint_bb:n #1
   {
     \cs_if_exist:NTF \symbb
-      { \symbb {#1} }
-      { \mathbb {#1} }
+      { { \symbb  {#1} } }
+      { { \mathbb {#1} } }
   }
 
 \cs_new_protected:Npn \macromint_cal:n #1
   {
     \cs_if_exist:NTF \symcal
-      { \symcal {#1} }
-      { \mathcal {#1} }
+      { { \symcal  {#1} } }
+      { { \mathcal {#1} } }
   }
 
 \cs_new_protected:Npn \macromint_up:n #1
   {
     \cs_if_exist:NTF \symup
-      { \symup {#1} }
-      { \mathrm {#1} }
+      { { \symup  {#1} } }
+      { { \mathrm {#1} } }
   }
 
 \NewDocumentCommand{\macromintbold}{m}{\macromint_bold:n {#1}}
@@ -250,14 +262,19 @@
 % Standard math operators
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
-\DeclareMathOperator*{\softmax}{softmax}
-\DeclareMathOperator*{\sgn}{sgn}
-\DeclareMathOperator*{\Bias}{Bias}
-\DeclareMathOperator*{\Var}{Var}
-\DeclareMathOperator*{\Cov}{Cov}
-\DeclareMathOperator*{\diag}{diag}
-\DeclareMathOperator*{\Perplexity}{Perplexity}
+\DeclareMathOperator{\softmax}{softmax}
+\DeclareMathOperator{\sgn}{sgn}
+\DeclareMathOperator{\Bias}{Bias}
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator{\diag}{diag}
+\DeclareMathOperator{\Perplexity}{Perplexity}
 \DeclareMathOperator{\rank}{rank}
+\DeclareMathOperator{\KL}{D_{\mathrm{KL}}}
+
+% Conventional ML shortcuts (expectation and reals)
+\NewDocumentCommand{\E}{}{\macromintbb{E}}
+\NewDocumentCommand{\R}{}{\macromintbb{R}}
 
 % Generic math functions
 \NewDocumentCommand{\domain}{m}{\operatorname{dom}\left( #1 \right)}
@@ -280,7 +297,7 @@
 % Calculus
 \ExplSyntaxOn
 \cs_new:Npn \macromint_order_power:n #1
-  { \str_if_eq:nnF {#1} {1} { ^ {#1} } }
+  { \str_if_eq:nnF {#1} {1} { \c_math_superscript_token {#1} } }
 
 \NewDocumentCommand{\diff}{O{1} m}
   { \macromintup { d } #2 \macromint_order_power:n {#1} }
@@ -302,17 +319,17 @@
       \IfBooleanTF {#1}
         { \deriv * [#2] {#3} {#4} }
         { \deriv [#2] {#3} {#4} }
-    \right|_{#3 = #5}
+    \right| \c_math_subscript_token {#3 = #5}
   }
 
 \NewDocumentCommand{\dderiv}{m m}
-  { \partial _ {#1} #2 }
+  { \partial \c_math_subscript_token {#1} #2 }
 
 \NewDocumentCommand{\dderivat}{m m o m}
   {
     \IfNoValueTF {#3}
       { \dderiv {#1} {#2} \left( #4 \right) }
-      { \left. \dderiv {#1} {#2} \right|_{#3 = #4} }
+      { \left. \dderiv {#1} {#2} \right| \c_math_subscript_token {#3 = #4} }
   }
 
 \NewDocumentCommand{\pderiv}{s O{1} m m}
@@ -329,7 +346,7 @@
       \IfBooleanTF {#1}
         { \pderiv * [#2] {#3} {#4} }
         { \pderiv [#2] {#3} {#4} }
-    \right|_{\IfNoValueTF {#5} {#3} {#5} = #6}
+    \right| \c_math_subscript_token {\IfNoValueTF {#5} {#3} {#5} = #6}
   }
 
 \NewDocumentCommand{\mpderiv}{s O{1} m m}
@@ -346,24 +363,24 @@
       \IfBooleanTF {#1}
         { \mpderiv * [#2] {#3} {#4} }
         { \mpderiv [#2] {#3} {#4} }
-    \right|_{#5 = #6}
+    \right| \c_math_subscript_token {#5 = #6}
   }
 
 \NewDocumentCommand{\mipderiv}{s m o m o}
   {
     \IfNoValueTF {#3}
       {
-        \macromintup { D } ^ {#2}
+        \macromintup { D } \c_math_superscript_token {#2}
         \IfBooleanTF {#1} { \left[ #4 \right] } {#4}
         \IfNoValueF {#5} { \left( #5 \right) }
       }
       {
         \IfNoValueF {#5} { \left. }
         \frac
-          { \partial ^ { \lvert #2 \rvert } \IfBooleanT {#1} {#4} }
+          { \partial \c_math_superscript_token { \lvert #2 \rvert } \IfBooleanT {#1} {#4} }
           { \pdiff [#2] {#3} }
         \IfBooleanF {#1} {#4}
-        \IfNoValueF {#5} { \right|_{#3 = #5} }
+        \IfNoValueF {#5} { \right| \c_math_subscript_token {#3 = #5} }
       }
   }
 
@@ -373,8 +390,8 @@
       { \macromintbold {D} #2 \IfNoValueF {#3} { \left( #3 \right) } }
       {
         \IfNoValueTF {#3}
-          { \macromintbold {D} _ {#1} #2 }
-          { \left. \macromintbold {D} _ {#1} #2 \right|_{#1 = #3} }
+          { \macromintbold {D} \c_math_subscript_token {#1} #2 }
+          { \left. \macromintbold {D} \c_math_subscript_token {#1} #2 \right| \c_math_subscript_token {#1 = #3} }
       }
   }
 
@@ -384,8 +401,8 @@
       { \nabla #2 \IfNoValueF {#3} { \left( #3 \right) } }
       {
         \IfNoValueTF {#3}
-          { \nabla _ {#1} #2 }
-          { \left. \nabla _ {#1} #2 \right|_{#1 = #3} }
+          { \nabla \c_math_subscript_token {#1} #2 }
+          { \left. \nabla \c_math_subscript_token {#1} #2 \right| \c_math_subscript_token {#1 = #3} }
       }
   }
 
@@ -398,8 +415,8 @@
       { \macromintbold {H} #2 \IfNoValueF {#3} { \left( #3 \right) } }
       {
         \IfNoValueTF {#3}
-          { \macromintbold {H} _ {#1} #2 }
-          { \left. \macromintbold {H} _ {#1} #2 \right|_{#1 = #3} }
+          { \macromintbold {H} \c_math_subscript_token {#1} #2 }
+          { \left. \macromintbold {H} \c_math_subscript_token {#1} #2 \right| \c_math_subscript_token {#1 = #3} }
       }
   }
 
@@ -407,11 +424,11 @@
   {
     \IfNoValueTF {#1}
       { \Delta #2 \IfNoValueF {#3} { \left( #3 \right) } }
-      { \left. \Delta #2 \right|_{#1 \IfNoValueF {#3} { = #3 }} }
+      { \left. \Delta #2 \right| \c_math_subscript_token {#1 \IfNoValueF {#3} { = #3 }} }
   }
 
 \NewDocumentCommand{\rintegral}{o o m m}
-  { \int \IfNoValueF {#1} { _ {#1} } \IfNoValueF {#2} { ^ {#2} } #4 \, \diff {#3} }
+  { \int \IfNoValueF {#1} { \c_math_subscript_token {#1} } \IfNoValueF {#2} { \c_math_superscript_token {#2} } #4 \, \diff {#3} }
 \ExplSyntaxOff
 
 % Statistical independence symbol

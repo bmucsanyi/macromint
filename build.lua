@@ -8,13 +8,14 @@ testfiledir = "testfiles"
 checkengines = { "luatex", "xetex", "pdftex" }
 
 local engines = {
-  lualatex = "lualatex",
-  xelatex = "xelatex",
-  pdflatex = "pdflatex",
+  "lualatex",
+  "xelatex",
+  "pdflatex",
 }
 
 local standard_tests = {
   "minimal-check",
+  "bm-before-macromint-check",
   "figmint-check",
   "public-api-check",
 }
@@ -105,7 +106,9 @@ local function compile_test(name, engine_name)
     "",
   }, ":")
   local command = "env TEXINPUTS=" .. quote(texinputs)
-    .. " " .. engines[engine_name]
+    .. " TEXMFVAR=" .. quote("build/texmf-var")
+    .. " TEXMFCACHE=" .. quote("build/texmf-var")
+    .. " " .. engine_name
     .. " -halt-on-error -interaction=nonstopmode"
     .. " -jobname=" .. quote(name .. "-" .. engine_name)
     .. " -output-directory=build"
@@ -124,7 +127,9 @@ local function compile_error_test(name, engine_name, needle)
     "",
   }, ":")
   local command = "env TEXINPUTS=" .. quote(texinputs)
-    .. " " .. engines[engine_name]
+    .. " TEXMFVAR=" .. quote("build/texmf-var")
+    .. " TEXMFCACHE=" .. quote("build/texmf-var")
+    .. " " .. engine_name
     .. " -halt-on-error -interaction=nonstopmode"
     .. " -jobname=" .. quote(name .. "-" .. engine_name)
     .. " -output-directory=build"
@@ -152,11 +157,11 @@ local function text_check()
 end
 
 local function macromint_check()
-  if run("create build directory", "mkdir -p build") ~= 0 then
+  if run("create build directory", "mkdir -p build/texmf-var") ~= 0 then
     return 1
   end
 
-  for name in pairs(engines) do
+  for _, name in ipairs(engines) do
     for _, test in ipairs(standard_tests) do
       if compile_test(test, name) ~= 0 then
         return 1
@@ -180,7 +185,7 @@ local function macromint_check()
 
   local where_error =
     "Package macromint Error: \\where may only be used inside \\set"
-  for name in pairs(engines) do
+  for _, name in ipairs(engines) do
     if compile_error_test("set-marker-error-check", name, where_error) ~= 0 then
       return 1
     end
@@ -190,7 +195,7 @@ local function macromint_check()
     return 1
   end
 
-  for name in pairs(engines) do
+  for _, name in ipairs(engines) do
     for _, test in ipairs(standard_tests) do
       if scan_log("build/" .. test .. "-" .. name .. ".log") ~= 0 then
         return 1

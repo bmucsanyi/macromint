@@ -10,12 +10,17 @@ theorem environments.
 ## Requirements
 
 `macromint` supports LuaLaTeX, XeLaTeX, and pdfLaTeX. It does not load
-`unicode-math` or `lua-unicode-math`. If a document or theme has already loaded
-an OpenType math backend, alphabet commands use the active `\sym...` commands.
+`unicode-math` or `stix2`. If a document or theme has already loaded an
+OpenType math backend, alphabet commands use the active `\sym...` commands.
 Otherwise, they use the standard LaTeX math alphabet commands from `mathtools`
 and `amssymb`.
 
-It does not set document fonts, colors, page layout, citation behavior, title
+Use the sibling `papermint` package for papers that should install the paper
+math stack. It loads `unicode-math` with `STIX Two Math` under LuaLaTeX and
+XeLaTeX, or `stix2` with `notext` and `bm` under pdfLaTeX. Load
+`macromint` separately for the macro bundle.
+
+It does not set text fonts, colors, page layout, citation behavior, title
 formatting, or figure styles. The document class and loaded style files own
 those choices.
 
@@ -48,15 +53,16 @@ In a slide deck:
 \usepackage{figmint}
 ```
 
-In a paper:
+In a paper that should install the paper math stack:
 
 ```tex
 \usepackage{neurips_2026}
+\usepackage{papermint}
 \usepackage{macromint}
 \usepackage{figmint}
 ```
 
-In a paper that owns an OpenType math setup:
+In a paper that already owns its math setup:
 
 ```tex
 \usepackage{mathtools}
