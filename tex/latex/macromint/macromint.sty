@@ -4,6 +4,9 @@
 \RequirePackage{mathtools}
 \RequirePackage{xspace}
 
+% A figure drawn by figmint is typeset with these macros too.
+\AddToHook{package/figmint/after}{\figmintpreamble{\usepackage{macromint}}}
+
 \ExplSyntaxOn
 % amsthm, unless the class brings its own proof environment: jmlr and llncs
 % do, and jmlr stops with an error when amsthm is loaded.

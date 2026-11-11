@@ -154,6 +154,17 @@ local function check(harness)
     end
   end
 
+  -- macromint declares the preamble line of its figures whatever the load
+  -- order; figmint-check loads figmint first.
+  for _, engine in ipairs(engines) do
+    local file = harness.output("figmint-check", engine, "figmint")
+    local needle = "preamble=\\usepackage {macromint}"
+    if not harness.file_contains(file, needle) then
+      print(file .. ": missing " .. needle)
+      return 1
+    end
+  end
+
   local box_log = harness.output("box-check", "pdflatex", "log")
   for _, box_check in ipairs(box_checks) do
     local needle = "MACROMINT_BOX name=" .. box_check
