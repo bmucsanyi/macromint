@@ -1,0 +1,42 @@
+\documentclass{article}
+\usepackage{macromint}
+
+% Logs whether two formulas set boxes of the same width, height, and depth.
+\newcommand{\compare}[3]{%
+  \setbox0\hbox{$#2$}%
+  \setbox1\hbox{$#3$}%
+  \typeout{MACROMINT_BOX name=#1;same=\ifdim\wd0=\wd1 \ifdim\ht0=\ht1 \ifdim\dp0=\dp1 true\else false\fi\else false\fi\else false\fi}%
+}
+
+\begin{document}
+
+% Delimiters: automatic size without a size argument, and the given size with one.
+\compare{abs-automatic}{\abs{\frac{a}{b}}}{\left\lvert \frac{a}{b} \right\rvert}
+\compare{abs-big}{\abs[\big]{\frac{a}{b}}}{\bigl\lvert \frac{a}{b} \bigr\rvert}
+\compare{abs-Bigg-differs-from-automatic}{\abs[\Bigg]{x}}{\abs{x}}
+\compare{norm-Big}{\norm[\Big]{x}}{\Bigl\lVert x \Bigr\rVert}
+\compare{card-bigg}{\card[\bigg]{S}}{\biggl\lvert S \biggr\rvert}
+\compare{ceil-Bigg}{\ceil[\Bigg]{x}}{\Biggl\lceil x \Biggr\rceil}
+\compare{floor-big}{\floor[\big]{x}}{\bigl\lfloor x \bigr\rfloor}
+\compare{inprod-automatic}{\inprod{x}{y}}{\left\langle x, y \right\rangle}
+\compare{inprod-big}{\inprod[\big]{x}{y}}{\bigl\langle x, y \bigr\rangle}
+\compare{set-automatic}{\set{x \where x > 0}}{\left\{ x \colon x > 0 \right\}}
+\compare{set-big}{\set[\big]{x \where x > 0}}{\bigl\{ x \colon x > 0 \bigr\}}
+\compare{set-suchthat-big}{\set[\big]{x \suchthat x > 0}}{\bigl\{ x \nonscript\:\big\vert\allowbreak\nonscript\:\mathopen{} x > 0 \bigr\}}
+
+% Differential operators: the optional variable is a subscript of the symbol,
+% and the optional point is where the result is evaluated.
+\compare{laplace}{\laplaceop{f}}{\Delta f}
+\compare{laplace-at}{\laplaceop{f}[a]}{\Delta f \left( a \right)}
+\compare{laplace-variable}{\laplaceop[x]{f}}{\Delta_{x} f}
+\compare{laplace-variable-at}{\laplaceop[x]{f}[a]}{\left. \Delta_{x} f \right|_{x = a}}
+\compare{laplace-variable-differs-from-evaluation}{\laplaceop[x]{f}}{\left. \Delta f \right|_{x}}
+\compare{gradient-variable}{\gradient[x]{f}}{\nabla_{x} f}
+\compare{gradient-variable-at}{\gradient[x]{f}[a]}{\left. \nabla_{x} f \right|_{x = a}}
+\compare{jacobian-at}{\jacobian{f}[a]}{\boldsymbol{D} f \left( a \right)}
+\compare{jacobian-variable-at}{\jacobian[x]{f}[a]}{\left. \boldsymbol{D}_{x} f \right|_{x = a}}
+\compare{hessian-variable}{\hessian[x]{f}}{\boldsymbol{H}_{x} f}
+
+Boxes compared in the log.
+
+\end{document}

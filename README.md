@@ -1,44 +1,25 @@
 # macromint
 
-`macromint` is my standalone macro bundle.
-
-It is independent of slide themes, figure styles, and conference templates. It
-owns shared macros: alphabet commands, delimiters, generic operators, calculus
-commands, recurring research notation, references, text abbreviations, and
-theorem environments.
+`macromint` is my LaTeX macro bundle for papers and slide decks.
 
 ## Requirements
 
-`macromint` supports LuaLaTeX, XeLaTeX, and pdfLaTeX. It does not load
-`unicode-math` or `stix2`. If a document or theme has already loaded an
-OpenType math backend, alphabet commands use the active `\sym...` commands.
-Otherwise, they use the standard LaTeX math alphabet commands from `mathtools`
-and `amssymb`.
+LuaLaTeX, XeLaTeX, or pdfLaTeX,
+`mathtools`, and `xspace`. `amsthm` is loaded unless the class brings its own
+`proof` environment, as `jmlr` and `llncs` do.
 
-Use the sibling `papermint` package for papers that should install the paper
-math stack. It loads `unicode-math` with `STIX Two Math` under LuaLaTeX and
-XeLaTeX, or `stix2` with `notext` and `bm` under pdfLaTeX. Load
-`macromint` separately for the macro bundle.
+## Installation
 
-It does not set text fonts, colors, page layout, citation behavior, title
-formatting, or figure styles. The document class and loaded style files own
-those choices.
-
-## Usage
-
-Install the package into your user TeX tree from the repository root:
+From the repository root:
 
 ```sh
 l3build install
 ```
 
-Check that TeX can find the installed package:
+This installs `macromint.sty` into the user TeX tree, where `kpsewhich
+macromint.sty` finds it. For arXiv, vendor the file into the paper source.
 
-```sh
-kpsewhich macromint.sty
-```
-
-Then load the package directly:
+## Usage
 
 ```tex
 \usepackage{macromint}
@@ -53,7 +34,7 @@ In a slide deck:
 \usepackage{figmint}
 ```
 
-In a paper that should install the paper math stack:
+In a paper that installs the paper math stack:
 
 ```tex
 \usepackage{neurips_2026}
@@ -62,7 +43,7 @@ In a paper that should install the paper math stack:
 \usepackage{figmint}
 ```
 
-In a paper that already owns its math setup:
+In a paper that owns its math setup:
 
 ```tex
 \usepackage{mathtools}
@@ -70,21 +51,96 @@ In a paper that already owns its math setup:
 \usepackage{macromint}
 ```
 
-For arXiv, vendor the exact `macromint.sty` file
-into the paper source tree.
+Under `jmlr`, which defines `\set` as `\mathcal`, do this:
 
-## Scope
+```tex
+\documentclass{jmlr}
+\let\set\relax
+\usepackage{macromint}
+```
 
-`macromint` owns shared macros. It does not depend on `slidemint` or `figmint`,
-and they do not depend on it.
+### Bold symbols
+
+A bold symbol has the shape it has at normal weight, on every engine. Latin
+letters and lower-case Greek are bold italic: `\bx` is $\boldsymbol{x}$ and
+`\btheta` is $\boldsymbol{\theta}$. Upper-case Greek and digits are bold
+upright: `\bTheta`, `\bzero`. The thirteen Greek capitals that share a Latin
+shape, `\bAlpha`, `\bBeta`, `\bEpsilon`, `\bZeta`, `\bEta`, `\bIota`,
+`\bKappa`, `\bMu`, `\bNu`, `\bOmicron`, `\bRho`, `\bTau`, and `\bChi`, are
+bold upright as well. Under `unicode-math` this holds whatever `bold-style`
+the document selects.
+
+### Theorem environments
+
+`macromint` provides `theorem`, `proposition`, `lemma`, `corollary`,
+`definition`, `assumption`, `problem`, and `remark`. Each is defined at load
+only where the class or an earlier package has not defined it, so a class with
+its own theorem environments keeps them, and `macromint` adds the missing ones
+on the `theorem` counter. Where `macromint` defines `theorem`, it is numbered
+within sections. The preamble may use the `theorem` counter, as in
+`\newtheorem{conjecture}[theorem]{Conjecture}`. The amsthm styles `plain`,
+`definition`, and `remark` are selected where `\theoremstyle` exists.
+
+## Public interface
+
+Alphabets:
+
+- `\ba` to `\bz` and `\bA` to `\bZ`, bold Latin letters, with `\bff` for f and
+  `\bmm` for m; `\bzero` and `\bone`.
+- `\balpha` to `\bomega` and `\bAlpha` to `\bOmega`, bold Greek letters, with
+  `\beeta` for eta.
+- `\nA` to `\nZ`, blackboard bold letters, and `\E` and `\R`.
+- `\cA` to `\cZ`, calligraphic letters.
+
+Relations and delimiters:
+
+- `\defeq`, `\rdefeq`.
+- `\set{x \in X \where P(x)}` and `\set{x \in X \suchthat P(x)}`, with `\where`
+  typeset as a colon and `\suchthat` as a bar. `\where` and `\suchthat` are
+  errors outside `\set`.
+- `\abs`, `\norm`, `\card`, `\ceil`, `\floor`, and `\inprod{x}{y}`.
+- Every delimiter takes the size through an optional argument, `\abs[\big]{x}`,
+  and scales to its content without it.
+
+References: `\figref`, `\secref`, `\eqnref`, `\tabref`.
+
+Operators: `\argmax`, `\argmin`, `\softmax`, `\sgn`, `\Bias`, `\Var`, `\Cov`,
+`\diag`, `\Perplexity`, `\rank`, `\KL`.
+
+Functions: `\domain`, `\range`, `\kernel`, `\linspan`, `\trace`, `\boundaryof`,
+`\closureof`, `\interiorof`, `\ball{r}{x}`, `\clball{r}{x}`, `\id[X]`,
+`\pvec{x \\ y}`, `\inv`, `\adj`, `\pinv`, `\orthcomp`, `\indep`.
+
+Calculus:
+
+- `\diff[n]{x}`, `\pdiff[n]{x}`.
+- `\deriv*[n]{x}{f}`, `\derivat*[n]{x}{f}{a}`, `\dderiv{x}{f}`,
+  `\dderivat{x}{f}[y]{a}`.
+- `\pderiv*[n]{x}{f}`, `\pderivat*[n]{x}{f}[y]{a}`, `\mpderiv*[n]{d}{f}`,
+  `\mpderivat*[n]{d}{f}{x}{a}`, `\mipderiv*{alpha}[x]{f}[a]`.
+- `\jacobian[x]{f}[a]`, `\gradient[x]{f}[a]`, `\hessian[x]{f}[a]`, and
+  `\laplaceop[x]{f}[a]`: the optional variable is the subscript of the
+  operator, and the optional point is where the result is evaluated.
+  `\divergence{v}[x]`.
+- `\rintegral[a][b]{x}{f}`.
+
+Text: `\onedot`, `\eg`, `\Eg`, `\ie`, `\Ie`, `\cf`, `\Cf`, `\etc`, `\vs`,
+`\wrt`, `\dof`, `\etal`, `\iid`, `\eos`.
+
+Theorem environments: `theorem`, `proposition`, `lemma`, `corollary`,
+`definition`, `assumption`, `problem`, `remark`.
 
 ## Tests
 
-Run from the repository root:
+From the repository root:
 
 ```sh
 l3build check
 ```
+
+The tests need a checkout of `figmint` next to this repository, which provides
+the shared test harness and the package that one test loads, the classes
+`beamer`, `jmlr`, `acmart`, and `llncs`, and `pdftotext`.
 
 ## License
 

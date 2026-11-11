@@ -1,257 +1,291 @@
 \NeedsTeXFormat{LaTeX2e}[2020-10-01]
-\ProvidesExplPackage{macromint}{2026-05-21}{0.1.0}
-  {Personal macro bundle}
+\ProvidesPackage{macromint}[2026-05-21 v0.1.0 Personal macro bundle]
 
 \RequirePackage{mathtools}
-\RequirePackage{amsthm}
 \RequirePackage{xspace}
 
 \ExplSyntaxOn
+% amsthm, unless the class brings its own proof environment: jmlr and llncs
+% do, and jmlr stops with an error when amsthm is loaded.
+\cs_if_exist:NF \proof { \RequirePackage{amsthm} }
+
 \cs_if_exist:NF \symbb
   {
     \cs_if_exist:NF \mathbb
       { \RequirePackage{amssymb} }
   }
 
-% The outer braces matter: unicode-math's \sym* commands have a
-% multi-token expansion that consumes their argument from the input
-% stream, so a bare \symbf{x} used as subscript material (e.g.
-% f_\btheta) would steal tokens from after the subscript. Wrapping
-% each helper in its own brace group keeps the expansion self-contained.
-\cs_new_protected:Npn \macromint_bold:n #1
+% Alphabets. The outer braces matter: unicode-math's \sym... commands have a
+% multi-token expansion that consumes their argument from the input stream,
+% so a bare \symbfit{x} used as subscript material (f_\btheta) would steal
+% tokens from after the subscript. Wrapping each helper in its own brace
+% group keeps the expansion self-contained.
+\cs_new_protected:Npn \__macromint_bold_legacy:n #1
   {
-    \cs_if_exist:NTF \symbf
-      { { \symbf {#1} } }
-      {
-        \cs_if_exist:NTF \bm
-          { { \bm {#1} } }
-          { { \boldsymbol {#1} } }
-      }
+    \cs_if_exist:NTF \bm
+      { { \bm {#1} } }
+      { { \boldsymbol {#1} } }
   }
 
-\cs_new_protected:Npn \macromint_bb:n #1
+% Bold of a symbol that is italic at normal weight: Latin letters and
+% lower-case Greek.
+\cs_new_protected:Npn \__macromint_bold:n #1
+  {
+    \cs_if_exist:NTF \symbfit
+      { { \symbfit {#1} } }
+      { \__macromint_bold_legacy:n {#1} }
+  }
+
+% Bold of a symbol that is upright at normal weight: digits and upper-case
+% Greek.
+\cs_new_protected:Npn \__macromint_bold_up:n #1
+  {
+    \cs_if_exist:NTF \symbfup
+      { { \symbfup {#1} } }
+      { \__macromint_bold_legacy:n {#1} }
+  }
+
+% Bold upright Latin letter, for the Greek capitals that share a Latin shape.
+\cs_new_protected:Npn \__macromint_bold_up_latin:n #1
+  {
+    \cs_if_exist:NTF \symbfup
+      { { \symbfup {#1} } }
+      { { \mathbf {#1} } }
+  }
+
+\cs_new_protected:Npn \__macromint_bb:n #1
   {
     \cs_if_exist:NTF \symbb
-      { { \symbb  {#1} } }
+      { { \symbb {#1} } }
       { { \mathbb {#1} } }
   }
 
-\cs_new_protected:Npn \macromint_cal:n #1
+\cs_new_protected:Npn \__macromint_cal:n #1
   {
     \cs_if_exist:NTF \symcal
-      { { \symcal  {#1} } }
+      { { \symcal {#1} } }
       { { \mathcal {#1} } }
   }
 
-\cs_new_protected:Npn \macromint_up:n #1
+\cs_new_protected:Npn \__macromint_up:n #1
   {
     \cs_if_exist:NTF \symup
-      { { \symup  {#1} } }
+      { { \symup {#1} } }
       { { \mathrm {#1} } }
   }
 
-\NewDocumentCommand{\macromintbold}{m}{\macromint_bold:n {#1}}
-\NewDocumentCommand{\macromintbb}{m}{\macromint_bb:n {#1}}
-\NewDocumentCommand{\macromintcal}{m}{\macromint_cal:n {#1}}
-\NewDocumentCommand{\macromintup}{m}{\macromint_up:n {#1}}
+% Bold Latin letters
+\NewDocumentCommand{\ba}{}{\__macromint_bold:n {a}}
+\NewDocumentCommand{\bA}{}{\__macromint_bold:n {A}}
+\NewDocumentCommand{\bb}{}{\__macromint_bold:n {b}}
+\NewDocumentCommand{\bB}{}{\__macromint_bold:n {B}}
+\NewDocumentCommand{\bc}{}{\__macromint_bold:n {c}}
+\NewDocumentCommand{\bC}{}{\__macromint_bold:n {C}}
+\NewDocumentCommand{\bd}{}{\__macromint_bold:n {d}}
+\NewDocumentCommand{\bD}{}{\__macromint_bold:n {D}}
+\NewDocumentCommand{\be}{}{\__macromint_bold:n {e}}
+\NewDocumentCommand{\bE}{}{\__macromint_bold:n {E}}
+\NewDocumentCommand{\bff}{}{\__macromint_bold:n {f}}
+\NewDocumentCommand{\bF}{}{\__macromint_bold:n {F}}
+\NewDocumentCommand{\bg}{}{\__macromint_bold:n {g}}
+\NewDocumentCommand{\bG}{}{\__macromint_bold:n {G}}
+\NewDocumentCommand{\bh}{}{\__macromint_bold:n {h}}
+\NewDocumentCommand{\bH}{}{\__macromint_bold:n {H}}
+\NewDocumentCommand{\bi}{}{\__macromint_bold:n {i}}
+\NewDocumentCommand{\bI}{}{\__macromint_bold:n {I}}
+\NewDocumentCommand{\bj}{}{\__macromint_bold:n {j}}
+\NewDocumentCommand{\bJ}{}{\__macromint_bold:n {J}}
+\NewDocumentCommand{\bk}{}{\__macromint_bold:n {k}}
+\NewDocumentCommand{\bK}{}{\__macromint_bold:n {K}}
+\NewDocumentCommand{\bl}{}{\__macromint_bold:n {l}}
+\NewDocumentCommand{\bL}{}{\__macromint_bold:n {L}}
+\NewDocumentCommand{\bmm}{}{\__macromint_bold:n {m}}
+\NewDocumentCommand{\bM}{}{\__macromint_bold:n {M}}
+\NewDocumentCommand{\bn}{}{\__macromint_bold:n {n}}
+\NewDocumentCommand{\bN}{}{\__macromint_bold:n {N}}
+\NewDocumentCommand{\bo}{}{\__macromint_bold:n {o}}
+\NewDocumentCommand{\bO}{}{\__macromint_bold:n {O}}
+\NewDocumentCommand{\bp}{}{\__macromint_bold:n {p}}
+\NewDocumentCommand{\bP}{}{\__macromint_bold:n {P}}
+\NewDocumentCommand{\bq}{}{\__macromint_bold:n {q}}
+\NewDocumentCommand{\bQ}{}{\__macromint_bold:n {Q}}
+\NewDocumentCommand{\br}{}{\__macromint_bold:n {r}}
+\NewDocumentCommand{\bR}{}{\__macromint_bold:n {R}}
+\NewDocumentCommand{\bs}{}{\__macromint_bold:n {s}}
+\NewDocumentCommand{\bS}{}{\__macromint_bold:n {S}}
+\NewDocumentCommand{\bt}{}{\__macromint_bold:n {t}}
+\NewDocumentCommand{\bT}{}{\__macromint_bold:n {T}}
+\NewDocumentCommand{\bu}{}{\__macromint_bold:n {u}}
+\NewDocumentCommand{\bU}{}{\__macromint_bold:n {U}}
+\NewDocumentCommand{\bv}{}{\__macromint_bold:n {v}}
+\NewDocumentCommand{\bV}{}{\__macromint_bold:n {V}}
+\NewDocumentCommand{\bw}{}{\__macromint_bold:n {w}}
+\NewDocumentCommand{\bW}{}{\__macromint_bold:n {W}}
+\NewDocumentCommand{\bx}{}{\__macromint_bold:n {x}}
+\NewDocumentCommand{\bX}{}{\__macromint_bold:n {X}}
+\NewDocumentCommand{\by}{}{\__macromint_bold:n {y}}
+\NewDocumentCommand{\bY}{}{\__macromint_bold:n {Y}}
+\NewDocumentCommand{\bz}{}{\__macromint_bold:n {z}}
+\NewDocumentCommand{\bZ}{}{\__macromint_bold:n {Z}}
+
+% Bold digits
+\NewDocumentCommand{\bzero}{}{\__macromint_bold_up:n {0}}
+\NewDocumentCommand{\bone}{}{\__macromint_bold_up:n {1}}
+
+% Bold Greek letters. The capitals are upright, including the thirteen that
+% share a Latin shape.
+\NewDocumentCommand{\balpha}{}{\__macromint_bold:n {\alpha}}
+\NewDocumentCommand{\bAlpha}{}{\__macromint_bold_up_latin:n {A}}
+\NewDocumentCommand{\bbeta}{}{\__macromint_bold:n {\beta}}
+\NewDocumentCommand{\bBeta}{}{\__macromint_bold_up_latin:n {B}}
+\NewDocumentCommand{\bgamma}{}{\__macromint_bold:n {\gamma}}
+\NewDocumentCommand{\bGamma}{}{\__macromint_bold_up:n {\Gamma}}
+\NewDocumentCommand{\bdelta}{}{\__macromint_bold:n {\delta}}
+\NewDocumentCommand{\bDelta}{}{\__macromint_bold_up:n {\Delta}}
+\NewDocumentCommand{\bepsilon}{}{\__macromint_bold:n {\epsilon}}
+\NewDocumentCommand{\bEpsilon}{}{\__macromint_bold_up_latin:n {E}}
+\NewDocumentCommand{\bzeta}{}{\__macromint_bold:n {\zeta}}
+\NewDocumentCommand{\bZeta}{}{\__macromint_bold_up_latin:n {Z}}
+\NewDocumentCommand{\beeta}{}{\__macromint_bold:n {\eta}}
+\NewDocumentCommand{\bEta}{}{\__macromint_bold_up_latin:n {H}}
+\NewDocumentCommand{\btheta}{}{\__macromint_bold:n {\theta}}
+\NewDocumentCommand{\bTheta}{}{\__macromint_bold_up:n {\Theta}}
+\NewDocumentCommand{\biota}{}{\__macromint_bold:n {\iota}}
+\NewDocumentCommand{\bIota}{}{\__macromint_bold_up_latin:n {I}}
+\NewDocumentCommand{\bkappa}{}{\__macromint_bold:n {\kappa}}
+\NewDocumentCommand{\bKappa}{}{\__macromint_bold_up_latin:n {K}}
+\NewDocumentCommand{\blambda}{}{\__macromint_bold:n {\lambda}}
+\NewDocumentCommand{\bLambda}{}{\__macromint_bold_up:n {\Lambda}}
+\NewDocumentCommand{\bmu}{}{\__macromint_bold:n {\mu}}
+\NewDocumentCommand{\bMu}{}{\__macromint_bold_up_latin:n {M}}
+\NewDocumentCommand{\bnu}{}{\__macromint_bold:n {\nu}}
+\NewDocumentCommand{\bNu}{}{\__macromint_bold_up_latin:n {N}}
+\NewDocumentCommand{\bxi}{}{\__macromint_bold:n {\xi}}
+\NewDocumentCommand{\bXi}{}{\__macromint_bold_up:n {\Xi}}
+\NewDocumentCommand{\bomicron}{}{\__macromint_bold:n {o}}
+\NewDocumentCommand{\bOmicron}{}{\__macromint_bold_up_latin:n {O}}
+\NewDocumentCommand{\bpi}{}{\__macromint_bold:n {\pi}}
+\NewDocumentCommand{\bPi}{}{\__macromint_bold_up:n {\Pi}}
+\NewDocumentCommand{\brho}{}{\__macromint_bold:n {\rho}}
+\NewDocumentCommand{\bRho}{}{\__macromint_bold_up_latin:n {P}}
+\NewDocumentCommand{\bsigma}{}{\__macromint_bold:n {\sigma}}
+\NewDocumentCommand{\bSigma}{}{\__macromint_bold_up:n {\Sigma}}
+\NewDocumentCommand{\btau}{}{\__macromint_bold:n {\tau}}
+\NewDocumentCommand{\bTau}{}{\__macromint_bold_up_latin:n {T}}
+\NewDocumentCommand{\bupsilon}{}{\__macromint_bold:n {\upsilon}}
+\NewDocumentCommand{\bUpsilon}{}{\__macromint_bold_up:n {\Upsilon}}
+\NewDocumentCommand{\bphi}{}{\__macromint_bold:n {\phi}}
+\NewDocumentCommand{\bPhi}{}{\__macromint_bold_up:n {\Phi}}
+\NewDocumentCommand{\bchi}{}{\__macromint_bold:n {\chi}}
+\NewDocumentCommand{\bChi}{}{\__macromint_bold_up_latin:n {X}}
+\NewDocumentCommand{\bpsi}{}{\__macromint_bold:n {\psi}}
+\NewDocumentCommand{\bPsi}{}{\__macromint_bold_up:n {\Psi}}
+\NewDocumentCommand{\bomega}{}{\__macromint_bold:n {\omega}}
+\NewDocumentCommand{\bOmega}{}{\__macromint_bold_up:n {\Omega}}
+
+% Blackboard bold letters
+\NewDocumentCommand{\nA}{}{\__macromint_bb:n {A}}
+\NewDocumentCommand{\nB}{}{\__macromint_bb:n {B}}
+\NewDocumentCommand{\nC}{}{\__macromint_bb:n {C}}
+\NewDocumentCommand{\nD}{}{\__macromint_bb:n {D}}
+\NewDocumentCommand{\nE}{}{\__macromint_bb:n {E}}
+\NewDocumentCommand{\nF}{}{\__macromint_bb:n {F}}
+\NewDocumentCommand{\nG}{}{\__macromint_bb:n {G}}
+\NewDocumentCommand{\nH}{}{\__macromint_bb:n {H}}
+\NewDocumentCommand{\nI}{}{\__macromint_bb:n {I}}
+\NewDocumentCommand{\nJ}{}{\__macromint_bb:n {J}}
+\NewDocumentCommand{\nK}{}{\__macromint_bb:n {K}}
+\NewDocumentCommand{\nL}{}{\__macromint_bb:n {L}}
+\NewDocumentCommand{\nM}{}{\__macromint_bb:n {M}}
+\NewDocumentCommand{\nN}{}{\__macromint_bb:n {N}}
+\NewDocumentCommand{\nO}{}{\__macromint_bb:n {O}}
+\NewDocumentCommand{\nP}{}{\__macromint_bb:n {P}}
+\NewDocumentCommand{\nQ}{}{\__macromint_bb:n {Q}}
+\NewDocumentCommand{\nR}{}{\__macromint_bb:n {R}}
+\NewDocumentCommand{\nS}{}{\__macromint_bb:n {S}}
+\NewDocumentCommand{\nT}{}{\__macromint_bb:n {T}}
+\NewDocumentCommand{\nU}{}{\__macromint_bb:n {U}}
+\NewDocumentCommand{\nV}{}{\__macromint_bb:n {V}}
+\NewDocumentCommand{\nW}{}{\__macromint_bb:n {W}}
+\NewDocumentCommand{\nX}{}{\__macromint_bb:n {X}}
+\NewDocumentCommand{\nY}{}{\__macromint_bb:n {Y}}
+\NewDocumentCommand{\nZ}{}{\__macromint_bb:n {Z}}
+
+% Expectation and reals
+\NewDocumentCommand{\E}{}{\__macromint_bb:n {E}}
+\NewDocumentCommand{\R}{}{\__macromint_bb:n {R}}
+
+% Calligraphic letters
+\NewDocumentCommand{\cA}{}{\__macromint_cal:n {A}}
+\NewDocumentCommand{\cB}{}{\__macromint_cal:n {B}}
+\NewDocumentCommand{\cC}{}{\__macromint_cal:n {C}}
+\NewDocumentCommand{\cD}{}{\__macromint_cal:n {D}}
+\NewDocumentCommand{\cE}{}{\__macromint_cal:n {E}}
+\NewDocumentCommand{\cF}{}{\__macromint_cal:n {F}}
+\NewDocumentCommand{\cG}{}{\__macromint_cal:n {G}}
+\NewDocumentCommand{\cH}{}{\__macromint_cal:n {H}}
+\NewDocumentCommand{\cI}{}{\__macromint_cal:n {I}}
+\NewDocumentCommand{\cJ}{}{\__macromint_cal:n {J}}
+\NewDocumentCommand{\cK}{}{\__macromint_cal:n {K}}
+\NewDocumentCommand{\cL}{}{\__macromint_cal:n {L}}
+\NewDocumentCommand{\cM}{}{\__macromint_cal:n {M}}
+\NewDocumentCommand{\cN}{}{\__macromint_cal:n {N}}
+\NewDocumentCommand{\cO}{}{\__macromint_cal:n {O}}
+\NewDocumentCommand{\cP}{}{\__macromint_cal:n {P}}
+\NewDocumentCommand{\cQ}{}{\__macromint_cal:n {Q}}
+\NewDocumentCommand{\cR}{}{\__macromint_cal:n {R}}
+\NewDocumentCommand{\cS}{}{\__macromint_cal:n {S}}
+\NewDocumentCommand{\cT}{}{\__macromint_cal:n {T}}
+\NewDocumentCommand{\cU}{}{\__macromint_cal:n {U}}
+\NewDocumentCommand{\cV}{}{\__macromint_cal:n {V}}
+\NewDocumentCommand{\cW}{}{\__macromint_cal:n {W}}
+\NewDocumentCommand{\cX}{}{\__macromint_cal:n {X}}
+\NewDocumentCommand{\cY}{}{\__macromint_cal:n {Y}}
+\NewDocumentCommand{\cZ}{}{\__macromint_cal:n {Z}}
 \ExplSyntaxOff
 
 % Relation symbols
 \NewDocumentCommand{\defeq}{}{\coloneq}
 \NewDocumentCommand{\rdefeq}{}{\eqcolon}
 
-% Delimiters
+% Delimiters. \where and \suchthat are markers that only \set gives a meaning.
 \NewDocumentCommand{\where}{}
-  { \PackageError{macromint}{\string\where\space may\space only\space be\space used\space inside\space \string\set}{Use \string\where\space only in the argument of \string\set.} }
+  {\PackageError{macromint}{\string\where\space may only be used inside \string\set}{Use \string\where\space only in the argument of \string\set.}}
 \NewDocumentCommand{\suchthat}{}
-  { \PackageError{macromint}{\string\suchthat\space may\space only\space be\space used\space inside\space \string\set}{Use \string\suchthat\space only in the argument of \string\set.} }
+  {\PackageError{macromint}{\string\suchthat\space may only be used inside \string\set}{Use \string\suchthat\space only in the argument of \string\set.}}
 \ExplSyntaxOn
-\DeclarePairedDelimiterX{\macromint_set_delim:n}[1]{\{}{\}}{#1}
-\DeclarePairedDelimiter{\macromint_abs_delim:n}{\lvert}{\rvert}
-\DeclarePairedDelimiter{\macromint_norm_delim:n}{\lVert}{\rVert}
-\DeclarePairedDelimiter{\macromint_ceil_delim:n}{\lceil}{\rceil}
-\DeclarePairedDelimiter{\macromint_floor_delim:n}{\lfloor}{\rfloor}
-\DeclarePairedDelimiterX{\macromint_inprod_delim:nn}[2]{\langle}{\rangle}{#1, #2}
+\DeclarePairedDelimiterX{\__macromint_set_delim:w}[1]{\{}{\}}{#1}
+\DeclarePairedDelimiter{\__macromint_abs_delim:w}{\lvert}{\rvert}
+\DeclarePairedDelimiter{\__macromint_norm_delim:w}{\lVert}{\rVert}
+\DeclarePairedDelimiter{\__macromint_ceil_delim:w}{\lceil}{\rceil}
+\DeclarePairedDelimiter{\__macromint_floor_delim:w}{\lfloor}{\rfloor}
+\DeclarePairedDelimiterX{\__macromint_inprod_delim:w}[2]{\langle}{\rangle}{#1, #2}
 
-\NewDocumentCommand{\set}{m}
+% Applies a paired delimiter of mathtools at the given size, such as \big, or
+% at the automatic size when no size is given.
+\cs_new_protected:Npn \__macromint_delimit:Nnn #1#2#3
+  { \IfNoValueTF {#2} { #1 * {#3} } { #1 [#2] {#3} } }
+
+\NewDocumentCommand{\set}{o m}
   {
     \begingroup
       \RenewDocumentCommand{\where}{}{\colon}
       \RenewDocumentCommand{\suchthat}{}{\nonscript\:\delimsize\vert\allowbreak\nonscript\:\mathopen{}}
-      \macromint_set_delim:n*{#1}
+      \__macromint_delimit:Nnn \__macromint_set_delim:w {#1} {#2}
     \endgroup
   }
-\NewDocumentCommand{\abs}{m}{\macromint_abs_delim:n*{#1}}
-\NewDocumentCommand{\norm}{m}{\macromint_norm_delim:n*{#1}}
-\NewDocumentCommand{\card}{m}{\macromint_abs_delim:n*{#1}}
-\NewDocumentCommand{\ceil}{m}{\macromint_ceil_delim:n*{#1}}
-\NewDocumentCommand{\floor}{m}{\macromint_floor_delim:n*{#1}}
-\NewDocumentCommand{\inprod}{m m}{\macromint_inprod_delim:nn*{#1}{#2}}
+\NewDocumentCommand{\abs}{o m}{\__macromint_delimit:Nnn \__macromint_abs_delim:w {#1} {#2}}
+\NewDocumentCommand{\norm}{o m}{\__macromint_delimit:Nnn \__macromint_norm_delim:w {#1} {#2}}
+\NewDocumentCommand{\card}{o m}{\__macromint_delimit:Nnn \__macromint_abs_delim:w {#1} {#2}}
+\NewDocumentCommand{\ceil}{o m}{\__macromint_delimit:Nnn \__macromint_ceil_delim:w {#1} {#2}}
+\NewDocumentCommand{\floor}{o m}{\__macromint_delimit:Nnn \__macromint_floor_delim:w {#1} {#2}}
+\NewDocumentCommand{\inprod}{o m m}
+  {
+    \IfNoValueTF {#1}
+      { \__macromint_inprod_delim:w * {#2} {#3} }
+      { \__macromint_inprod_delim:w [#1] {#2} {#3} }
+  }
 \ExplSyntaxOff
-
-% Bold Latin letters
-\NewDocumentCommand{\ba}{}{\macromintbold{a}}
-\NewDocumentCommand{\bA}{}{\macromintbold{A}}
-\NewDocumentCommand{\bb}{}{\macromintbold{b}}
-\NewDocumentCommand{\bB}{}{\macromintbold{B}}
-\NewDocumentCommand{\bc}{}{\macromintbold{c}}
-\NewDocumentCommand{\bC}{}{\macromintbold{C}}
-\NewDocumentCommand{\bd}{}{\macromintbold{d}}
-\NewDocumentCommand{\bD}{}{\macromintbold{D}}
-\NewDocumentCommand{\be}{}{\macromintbold{e}}
-\NewDocumentCommand{\bE}{}{\macromintbold{E}}
-\NewDocumentCommand{\bff}{}{\macromintbold{f}}
-\NewDocumentCommand{\bF}{}{\macromintbold{F}}
-\NewDocumentCommand{\bg}{}{\macromintbold{g}}
-\NewDocumentCommand{\bG}{}{\macromintbold{G}}
-\NewDocumentCommand{\bh}{}{\macromintbold{h}}
-\NewDocumentCommand{\bH}{}{\macromintbold{H}}
-\NewDocumentCommand{\bi}{}{\macromintbold{i}}
-\NewDocumentCommand{\bI}{}{\macromintbold{I}}
-\NewDocumentCommand{\bj}{}{\macromintbold{j}}
-\NewDocumentCommand{\bJ}{}{\macromintbold{J}}
-\NewDocumentCommand{\bk}{}{\macromintbold{k}}
-\NewDocumentCommand{\bK}{}{\macromintbold{K}}
-\NewDocumentCommand{\bl}{}{\macromintbold{l}}
-\NewDocumentCommand{\bL}{}{\macromintbold{L}}
-\NewDocumentCommand{\bmm}{}{\macromintbold{m}}
-\NewDocumentCommand{\bM}{}{\macromintbold{M}}
-\NewDocumentCommand{\bn}{}{\macromintbold{n}}
-\NewDocumentCommand{\bN}{}{\macromintbold{N}}
-\NewDocumentCommand{\bo}{}{\macromintbold{o}}
-\NewDocumentCommand{\bO}{}{\macromintbold{O}}
-\NewDocumentCommand{\bp}{}{\macromintbold{p}}
-\NewDocumentCommand{\bP}{}{\macromintbold{P}}
-\NewDocumentCommand{\bq}{}{\macromintbold{q}}
-\NewDocumentCommand{\bQ}{}{\macromintbold{Q}}
-\NewDocumentCommand{\br}{}{\macromintbold{r}}
-\NewDocumentCommand{\bR}{}{\macromintbold{R}}
-\NewDocumentCommand{\bs}{}{\macromintbold{s}}
-\NewDocumentCommand{\bS}{}{\macromintbold{S}}
-\NewDocumentCommand{\bt}{}{\macromintbold{t}}
-\NewDocumentCommand{\bT}{}{\macromintbold{T}}
-\NewDocumentCommand{\bu}{}{\macromintbold{u}}
-\NewDocumentCommand{\bU}{}{\macromintbold{U}}
-\NewDocumentCommand{\bv}{}{\macromintbold{v}}
-\NewDocumentCommand{\bV}{}{\macromintbold{V}}
-\NewDocumentCommand{\bw}{}{\macromintbold{w}}
-\NewDocumentCommand{\bW}{}{\macromintbold{W}}
-\NewDocumentCommand{\bx}{}{\macromintbold{x}}
-\NewDocumentCommand{\bX}{}{\macromintbold{X}}
-\NewDocumentCommand{\by}{}{\macromintbold{y}}
-\NewDocumentCommand{\bY}{}{\macromintbold{Y}}
-\NewDocumentCommand{\bz}{}{\macromintbold{z}}
-\NewDocumentCommand{\bZ}{}{\macromintbold{Z}}
-
-% Bold digits
-\NewDocumentCommand{\bzero}{}{\macromintbold{0}}
-\NewDocumentCommand{\bone}{}{\macromintbold{1}}
-
-% Bold Greek letters
-\NewDocumentCommand{\balpha}{}{\macromintbold{\alpha}}
-\NewDocumentCommand{\bAlpha}{}{\macromintbold{A}}
-\NewDocumentCommand{\bbeta}{}{\macromintbold{\beta}}
-\NewDocumentCommand{\bBeta}{}{\macromintbold{B}}
-\NewDocumentCommand{\bgamma}{}{\macromintbold{\gamma}}
-\NewDocumentCommand{\bGamma}{}{\macromintbold{\Gamma}}
-\NewDocumentCommand{\bdelta}{}{\macromintbold{\delta}}
-\NewDocumentCommand{\bDelta}{}{\macromintbold{\Delta}}
-\NewDocumentCommand{\bepsilon}{}{\macromintbold{\epsilon}}
-\NewDocumentCommand{\bEpsilon}{}{\macromintbold{E}}
-\NewDocumentCommand{\bzeta}{}{\macromintbold{\zeta}}
-\NewDocumentCommand{\bZeta}{}{\macromintbold{Z}}
-\NewDocumentCommand{\beeta}{}{\macromintbold{\eta}}
-\NewDocumentCommand{\bEta}{}{\macromintbold{H}}
-\NewDocumentCommand{\btheta}{}{\macromintbold{\theta}}
-\NewDocumentCommand{\bTheta}{}{\macromintbold{\Theta}}
-\NewDocumentCommand{\biota}{}{\macromintbold{\iota}}
-\NewDocumentCommand{\bIota}{}{\macromintbold{I}}
-\NewDocumentCommand{\bkappa}{}{\macromintbold{\kappa}}
-\NewDocumentCommand{\bKappa}{}{\macromintbold{K}}
-\NewDocumentCommand{\blambda}{}{\macromintbold{\lambda}}
-\NewDocumentCommand{\bLambda}{}{\macromintbold{\Lambda}}
-\NewDocumentCommand{\bmu}{}{\macromintbold{\mu}}
-\NewDocumentCommand{\bMu}{}{\macromintbold{M}}
-\NewDocumentCommand{\bnu}{}{\macromintbold{\nu}}
-\NewDocumentCommand{\bNu}{}{\macromintbold{N}}
-\NewDocumentCommand{\bxi}{}{\macromintbold{\xi}}
-\NewDocumentCommand{\bXi}{}{\macromintbold{\Xi}}
-\NewDocumentCommand{\bomicron}{}{\macromintbold{o}}
-\NewDocumentCommand{\bOmicron}{}{\macromintbold{O}}
-\NewDocumentCommand{\bpi}{}{\macromintbold{\pi}}
-\NewDocumentCommand{\bPi}{}{\macromintbold{\Pi}}
-\NewDocumentCommand{\brho}{}{\macromintbold{\rho}}
-\NewDocumentCommand{\bRho}{}{\macromintbold{P}}
-\NewDocumentCommand{\bsigma}{}{\macromintbold{\sigma}}
-\NewDocumentCommand{\bSigma}{}{\macromintbold{\Sigma}}
-\NewDocumentCommand{\btau}{}{\macromintbold{\tau}}
-\NewDocumentCommand{\bTau}{}{\macromintbold{T}}
-\NewDocumentCommand{\bupsilon}{}{\macromintbold{\upsilon}}
-\NewDocumentCommand{\bUpsilon}{}{\macromintbold{\Upsilon}}
-\NewDocumentCommand{\bphi}{}{\macromintbold{\phi}}
-\NewDocumentCommand{\bPhi}{}{\macromintbold{\Phi}}
-\NewDocumentCommand{\bchi}{}{\macromintbold{\chi}}
-\NewDocumentCommand{\bChi}{}{\macromintbold{X}}
-\NewDocumentCommand{\bpsi}{}{\macromintbold{\psi}}
-\NewDocumentCommand{\bPsi}{}{\macromintbold{\Psi}}
-\NewDocumentCommand{\bomega}{}{\macromintbold{\omega}}
-\NewDocumentCommand{\bOmega}{}{\macromintbold{\Omega}}
-
-% Blackboard bold letters
-\NewDocumentCommand{\nA}{}{\macromintbb{A}}
-\NewDocumentCommand{\nB}{}{\macromintbb{B}}
-\NewDocumentCommand{\nC}{}{\macromintbb{C}}
-\NewDocumentCommand{\nD}{}{\macromintbb{D}}
-\NewDocumentCommand{\nE}{}{\macromintbb{E}}
-\NewDocumentCommand{\nF}{}{\macromintbb{F}}
-\NewDocumentCommand{\nG}{}{\macromintbb{G}}
-\NewDocumentCommand{\nH}{}{\macromintbb{H}}
-\NewDocumentCommand{\nI}{}{\macromintbb{I}}
-\NewDocumentCommand{\nJ}{}{\macromintbb{J}}
-\NewDocumentCommand{\nK}{}{\macromintbb{K}}
-\NewDocumentCommand{\nL}{}{\macromintbb{L}}
-\NewDocumentCommand{\nM}{}{\macromintbb{M}}
-\NewDocumentCommand{\nN}{}{\macromintbb{N}}
-\NewDocumentCommand{\nO}{}{\macromintbb{O}}
-\NewDocumentCommand{\nP}{}{\macromintbb{P}}
-\NewDocumentCommand{\nQ}{}{\macromintbb{Q}}
-\NewDocumentCommand{\nR}{}{\macromintbb{R}}
-\NewDocumentCommand{\nS}{}{\macromintbb{S}}
-\NewDocumentCommand{\nT}{}{\macromintbb{T}}
-\NewDocumentCommand{\nU}{}{\macromintbb{U}}
-\NewDocumentCommand{\nV}{}{\macromintbb{V}}
-\NewDocumentCommand{\nW}{}{\macromintbb{W}}
-\NewDocumentCommand{\nX}{}{\macromintbb{X}}
-\NewDocumentCommand{\nY}{}{\macromintbb{Y}}
-\NewDocumentCommand{\nZ}{}{\macromintbb{Z}}
-
-% Calligraphic letters
-\NewDocumentCommand{\cA}{}{\macromintcal{A}}
-\NewDocumentCommand{\cB}{}{\macromintcal{B}}
-\NewDocumentCommand{\cC}{}{\macromintcal{C}}
-\NewDocumentCommand{\cD}{}{\macromintcal{D}}
-\NewDocumentCommand{\cE}{}{\macromintcal{E}}
-\NewDocumentCommand{\cF}{}{\macromintcal{F}}
-\NewDocumentCommand{\cG}{}{\macromintcal{G}}
-\NewDocumentCommand{\cH}{}{\macromintcal{H}}
-\NewDocumentCommand{\cI}{}{\macromintcal{I}}
-\NewDocumentCommand{\cJ}{}{\macromintcal{J}}
-\NewDocumentCommand{\cK}{}{\macromintcal{K}}
-\NewDocumentCommand{\cL}{}{\macromintcal{L}}
-\NewDocumentCommand{\cM}{}{\macromintcal{M}}
-\NewDocumentCommand{\cN}{}{\macromintcal{N}}
-\NewDocumentCommand{\cO}{}{\macromintcal{O}}
-\NewDocumentCommand{\cP}{}{\macromintcal{P}}
-\NewDocumentCommand{\cQ}{}{\macromintcal{Q}}
-\NewDocumentCommand{\cR}{}{\macromintcal{R}}
-\NewDocumentCommand{\cS}{}{\macromintcal{S}}
-\NewDocumentCommand{\cT}{}{\macromintcal{T}}
-\NewDocumentCommand{\cU}{}{\macromintcal{U}}
-\NewDocumentCommand{\cV}{}{\macromintcal{V}}
-\NewDocumentCommand{\cW}{}{\macromintcal{W}}
-\NewDocumentCommand{\cX}{}{\macromintcal{X}}
-\NewDocumentCommand{\cY}{}{\macromintcal{Y}}
-\NewDocumentCommand{\cZ}{}{\macromintcal{Z}}
 
 % References
 \NewDocumentCommand{\figref}{m}{Fig.~\ref{#1}}
@@ -271,10 +305,6 @@
 \DeclareMathOperator{\Perplexity}{Perplexity}
 \DeclareMathOperator{\rank}{rank}
 \DeclareMathOperator{\KL}{D_{\mathrm{KL}}}
-
-% Conventional ML shortcuts (expectation and reals)
-\NewDocumentCommand{\E}{}{\macromintbb{E}}
-\NewDocumentCommand{\R}{}{\macromintbb{R}}
 
 % Generic math functions
 \NewDocumentCommand{\domain}{m}{\operatorname{dom}\left( #1 \right)}
@@ -296,19 +326,19 @@
 
 % Calculus
 \ExplSyntaxOn
-\cs_new:Npn \macromint_order_power:n #1
+\cs_new:Npn \__macromint_order_power:n #1
   { \str_if_eq:nnF {#1} {1} { \c_math_superscript_token {#1} } }
 
 \NewDocumentCommand{\diff}{O{1} m}
-  { \macromintup { d } #2 \macromint_order_power:n {#1} }
+  { \__macromint_up:n { d } #2 \__macromint_order_power:n {#1} }
 
 \NewDocumentCommand{\pdiff}{O{1} m}
-  { \partial #2 \macromint_order_power:n {#1} }
+  { \partial #2 \__macromint_order_power:n {#1} }
 
 \NewDocumentCommand{\deriv}{s O{1} m m}
   {
     \frac
-      { \macromintup { d } \macromint_order_power:n {#2} \IfBooleanT {#1} {#4} }
+      { \__macromint_up:n { d } \__macromint_order_power:n {#2} \IfBooleanT {#1} {#4} }
       { \diff [#2] {#3} }
     \IfBooleanF {#1} {#4}
   }
@@ -335,7 +365,7 @@
 \NewDocumentCommand{\pderiv}{s O{1} m m}
   {
     \frac
-      { \partial \macromint_order_power:n {#2} \IfBooleanT {#1} {#4} }
+      { \partial \__macromint_order_power:n {#2} \IfBooleanT {#1} {#4} }
       { \pdiff [#2] {#3} }
     \IfBooleanF {#1} {#4}
   }
@@ -352,7 +382,7 @@
 \NewDocumentCommand{\mpderiv}{s O{1} m m}
   {
     \frac
-      { \partial \macromint_order_power:n {#2} \IfBooleanT {#1} {#4} }
+      { \partial \__macromint_order_power:n {#2} \IfBooleanT {#1} {#4} }
       {#3}
     \IfBooleanF {#1} {#4}
   }
@@ -370,7 +400,7 @@
   {
     \IfNoValueTF {#3}
       {
-        \macromintup { D } \c_math_superscript_token {#2}
+        \__macromint_up:n { D } \c_math_superscript_token {#2}
         \IfBooleanTF {#1} { \left[ #4 \right] } {#4}
         \IfNoValueF {#5} { \left( #5 \right) }
       }
@@ -384,48 +414,33 @@
       }
   }
 
-\NewDocumentCommand{\jacobian}{o m o}
+% The differential operators share one shape: a symbol, an optional variable
+% as its subscript, the function, and an optional point of evaluation.
+\cs_new_protected:Npn \__macromint_operator:nnnn #1#2#3#4
   {
-    \IfNoValueTF {#1}
-      { \macromintbold {D} #2 \IfNoValueF {#3} { \left( #3 \right) } }
+    \IfNoValueTF {#2}
+      { #1 #3 \IfNoValueF {#4} { \left( #4 \right) } }
       {
-        \IfNoValueTF {#3}
-          { \macromintbold {D} \c_math_subscript_token {#1} #2 }
-          { \left. \macromintbold {D} \c_math_subscript_token {#1} #2 \right| \c_math_subscript_token {#1 = #3} }
+        \IfNoValueTF {#4}
+          { #1 \c_math_subscript_token {#2} #3 }
+          { \left. #1 \c_math_subscript_token {#2} #3 \right| \c_math_subscript_token {#2 = #4} }
       }
   }
 
+\NewDocumentCommand{\jacobian}{o m o}
+  { \__macromint_operator:nnnn { \__macromint_bold:n {D} } {#1} {#2} {#3} }
+
 \NewDocumentCommand{\gradient}{o m o}
-  {
-    \IfNoValueTF {#1}
-      { \nabla #2 \IfNoValueF {#3} { \left( #3 \right) } }
-      {
-        \IfNoValueTF {#3}
-          { \nabla \c_math_subscript_token {#1} #2 }
-          { \left. \nabla \c_math_subscript_token {#1} #2 \right| \c_math_subscript_token {#1 = #3} }
-      }
-  }
+  { \__macromint_operator:nnnn { \nabla } {#1} {#2} {#3} }
 
 \NewDocumentCommand{\divergence}{m o}
   { \operatorname { div } \left( #1 \right) \IfNoValueF {#2} { \left( #2 \right) } }
 
 \NewDocumentCommand{\hessian}{o m o}
-  {
-    \IfNoValueTF {#1}
-      { \macromintbold {H} #2 \IfNoValueF {#3} { \left( #3 \right) } }
-      {
-        \IfNoValueTF {#3}
-          { \macromintbold {H} \c_math_subscript_token {#1} #2 }
-          { \left. \macromintbold {H} \c_math_subscript_token {#1} #2 \right| \c_math_subscript_token {#1 = #3} }
-      }
-  }
+  { \__macromint_operator:nnnn { \__macromint_bold:n {H} } {#1} {#2} {#3} }
 
 \NewDocumentCommand{\laplaceop}{o m o}
-  {
-    \IfNoValueTF {#1}
-      { \Delta #2 \IfNoValueF {#3} { \left( #3 \right) } }
-      { \left. \Delta #2 \right| \c_math_subscript_token {#1 \IfNoValueF {#3} { = #3 }} }
-  }
+  { \__macromint_operator:nnnn { \Delta } {#1} {#2} {#3} }
 
 \NewDocumentCommand{\rintegral}{o o m m}
   { \int \IfNoValueF {#1} { \c_math_subscript_token {#1} } \IfNoValueF {#2} { \c_math_superscript_token {#2} } #4 \, \diff {#3} }
@@ -436,9 +451,9 @@
 
 % Text abbreviations
 \ExplSyntaxOn
-\cs_new_protected:Npn \macromint_onedot:
+\cs_new_protected:Npn \__macromint_onedot:
   { \peek_charcode_remove:NTF . { . \xspace } { . \null \xspace } }
-\NewDocumentCommand{\onedot}{}{\macromint_onedot:}
+\NewDocumentCommand{\onedot}{}{\__macromint_onedot:}
 \NewDocumentCommand{\eg}{}{e.g \onedot}
 \NewDocumentCommand{\Eg}{}{E.g \onedot}
 \NewDocumentCommand{\ie}{}{i.e \onedot}
@@ -454,17 +469,29 @@
 \NewDocumentCommand{\eos}{}{\texttt { \char60 EOS \char62 }}
 \ExplSyntaxOff
 
-% Theorem environments
-\theoremstyle{plain}
-\newtheorem{theorem}{Theorem}[section]
-\newtheorem{proposition}[theorem]{Proposition}
-\newtheorem{lemma}[theorem]{Lemma}
-\newtheorem{corollary}[theorem]{Corollary}
-
-\theoremstyle{definition}
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{assumption}[theorem]{Assumption}
-\newtheorem{problem}[theorem]{Problem}
-
-\theoremstyle{remark}
-\newtheorem{remark}[theorem]{Remark}
+% Theorem environments. Each is defined only where the class or an earlier
+% package has not defined it, so that a class with its own environments keeps
+% them. The definitions happen at load, because a preamble may use the
+% theorem counter. An amsthm style is selected only where \theoremstyle exists.
+\ExplSyntaxOn
+\cs_new_protected:Npn \__macromint_provide_theorem:nnn #1#2#3
+  {
+    \cs_if_exist:cF {#2}
+      {
+        \cs_if_exist:NT \theoremstyle { \theoremstyle {#1} }
+        \newtheorem {#2} [theorem] {#3}
+      }
+  }
+\cs_if_exist:cF { theorem }
+  {
+    \cs_if_exist:NT \theoremstyle { \theoremstyle { plain } }
+    \newtheorem { theorem } { Theorem } [section]
+  }
+\__macromint_provide_theorem:nnn { plain } { proposition } { Proposition }
+\__macromint_provide_theorem:nnn { plain } { lemma } { Lemma }
+\__macromint_provide_theorem:nnn { plain } { corollary } { Corollary }
+\__macromint_provide_theorem:nnn { definition } { definition } { Definition }
+\__macromint_provide_theorem:nnn { definition } { assumption } { Assumption }
+\__macromint_provide_theorem:nnn { definition } { problem } { Problem }
+\__macromint_provide_theorem:nnn { remark } { remark } { Remark }
+\ExplSyntaxOff
